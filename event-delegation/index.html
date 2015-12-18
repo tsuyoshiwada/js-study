@@ -7,12 +7,37 @@
   <title>Event Delegation</title>
 </head>
 <body>
-  <div id="wrapper"><a id="anchor" href="#"><span>span</span> Anchor Text</a></div>
+  <div id="wrapper">
+    <a id="anchor" href="#"><span>span</span> Anchor Text</a>
+  </div>
 
   <script>
-    document.addEventListener("click", function(e) {
-      console.log(e);
-    }, false);
+    // https://developer.mozilla.org/ja/docs/Web/API/Element/matches
+    function matches(elm, selector) {
+      var matches = (elm.document || elm.ownerDocument).querySelectorAll(selector),
+      i = matches.length;
+      while (--i >= 0 && matches.item(i) !== elm) ;
+      return i > -1;
+    }
+
+    // Event delegation
+    function delegateEvent(root, events, selector, callback) {
+      root.addEventListener(events, function(e) {
+        var el = e.target;
+        while (el && el !== root) {
+          if (matches(el, selector)) {
+            callback.call(el, e, el);
+            break;
+          }
+          el = el.parentNode;
+        }
+      }, false);
+    }
+
+    // Initialize
+    delegateEvent(document, "click", "a[href^='#']", function(e, el) {
+      console.log(e, el);
+    });
   </script>
 </body>
 </html>
