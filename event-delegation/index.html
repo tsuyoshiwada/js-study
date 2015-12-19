@@ -22,12 +22,12 @@
     }
 
     // Event delegation
-    function delegateEvent(root, eventType, selector, callback) {
+    function delegateEvent(root, eventType, selector, listener) {
       root.addEventListener(eventType, function(e) {
         var el = e.target;
         while (el && el !== root) {
           if (matches(el, selector)) {
-            callback.call(el, e, el);
+            listener.call(el, e, el);
             break;
           }
           el = el.parentNode;
