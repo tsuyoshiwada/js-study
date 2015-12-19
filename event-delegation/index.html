@@ -8,7 +8,8 @@
 </head>
 <body>
   <div id="wrapper">
-    <a id="anchor" href="#"><span>span</span> Anchor Text</a>
+    <a class="" href="index.html">Clickable</a>
+    <a class="clickable" href="#">Clickable</a>
   </div>
 
   <script>
@@ -21,8 +22,8 @@
     }
 
     // Event delegation
-    function delegateEvent(root, events, selector, callback) {
-      root.addEventListener(events, function(e) {
+    function delegateEvent(root, eventType, selector, callback) {
+      root.addEventListener(eventType, function(e) {
         var el = e.target;
         while (el && el !== root) {
           if (matches(el, selector)) {
@@ -35,7 +36,10 @@
     }
 
     // Initialize
-    delegateEvent(document, "click", "a[href^='#']", function(e, el) {
+    delegateEvent(document, "click", ".clickable", function(e, el) {
+      e.preventDefault();
+      var copy = el.cloneNode(true);
+      document.getElementById("wrapper").appendChild(copy);
       console.log(e, el);
     });
   </script>
