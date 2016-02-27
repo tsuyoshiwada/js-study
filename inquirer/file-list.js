@@ -1,23 +1,32 @@
 "use strict";
 
 const fs = require("fs");
+const path = require("path");
 const inquirer = require("inquirer");
 
-function readAndPrompt(path) {
-  if (fs.statSync(path).isFile()) {
-    console.log(`End => ${path}`);
+function realpath(relative) {
+  return path.join(__dirname, relative);
+}
+
+function readAndPrompt(currentPath) {
+  const realCurrentPath = realpath(currentPath);
+
+  if (fs.statSync(realCurrentPath).isFile()) {
+    console.log(`End => ${realCurrentPath}`);
     return;
   }
 
-  fs.readdir(path, (err, files) => {
+  fs.readdir(currentPath, (err, files) => {
     if (err) throw err;
 
     files = files.map((file) => {
-      if (fs.statSync(`${path}/${file}`).isDirectory()) {
+      if (fs.statSync(`${currentPath}/${file}`).isDirectory()) {
         return `${file}/`;
       }
       return file;
     });
+
+    files.unshift("..");
 
     inquirer.prompt([
       {
@@ -27,8 +36,9 @@ function readAndPrompt(path) {
         choices: files
       }
     ], (answers) => {
-      const file = /^.*\/$/.test(answers.file) ? answers.file.substr(0, answers.file.length - 1) : answers.file;
-      readAndPrompt(`${path}/${file}`);
+      let file = answers.file;
+      file = /^.*\/$/.test(file) ? file.substr(0, file.length - 1) : file;
+      readAndPrompt(`${currentPath}/${file}`);
     });
   });
 }
