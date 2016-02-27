@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const inquirer = require("inquirer");
+const colors = require("colors");
 
 function realpath(relative) {
   return path.join(__dirname, relative);
@@ -12,7 +13,7 @@ function readAndPrompt(currentPath) {
   const realCurrentPath = realpath(currentPath);
 
   if (fs.statSync(realCurrentPath).isFile()) {
-    console.log(`End => ${realCurrentPath}`);
+    console.log(colors.cyan("Path : %s"), realCurrentPath);
     return;
   }
 
