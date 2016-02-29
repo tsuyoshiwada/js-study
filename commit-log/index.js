@@ -90,9 +90,19 @@ Git.Repository.open(REPO_PATH)
   })
   .then((res) => {
     secondCommit = res.commit;
-    clearConsole();
-    console.log(`${colors.cyan("First CommitID")} : ${firstCommit.sha()}`);
-    console.log(`${colors.cyan("Second CommitID")} : ${secondCommit.sha()}`);
+    return res.commit.getDiff();
+    // clearConsole();
+    // console.log(`${colors.cyan("First CommitID")} : ${firstCommit.sha()}`);
+    // console.log(`${colors.cyan("Second CommitID")} : ${secondCommit.sha()}`);
+  })
+  .then((diffList) => {
+    diffList.forEach((diff) => {
+      diff.patches().then((patches) => {
+        patches.forEach((patch) => {
+          console.log(patch.oldFile().path());
+        });
+      });
+    });
   })
   .catch((err) => {
     console.error(err);
