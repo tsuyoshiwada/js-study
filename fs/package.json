@@ -1,0 +1,16 @@
+{
+  "name": "fs-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exists-list.js",
+  "scripts": {
+    "test": "mocha",
+    "test:watch": "mocha -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "power-assert": "^1.2.0"
+  }
+}
