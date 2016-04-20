@@ -1,0 +1,7 @@
+# os & node.js
+.DS_Store
+node_modules
+
+# project
+tmp
+config.js

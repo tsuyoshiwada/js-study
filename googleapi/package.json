@@ -1,0 +1,20 @@
+{
+  "name": "sample-googleapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "supervisor app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "googleapis": "^5.1.0",
+    "supervisor": "^0.10.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.15.0"
+  }
+}
