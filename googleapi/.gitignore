@@ -3,5 +3,6 @@
 node_modules
 
 # project
+.env
+client_secret.json
 tmp
-config.js
