@@ -15,7 +15,7 @@ passport.use(new DropboxStrategy({
   consumerSecret: process.env.DROPBOX_SECRET,
   callbackURL: "http://localhost:3000/login/callback"
 }, (token, tokenSecret, profile, cb) => {
-  console.log("Login", token, tokenSecret, profile);
+  profile.token = token;
   return cb(null, profile);
 }));
 

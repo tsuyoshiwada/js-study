@@ -2,9 +2,12 @@
 
 const express = require("express");
 const router = express.Router();
+const dbox = require("dbox");
 
 router.get("/", (req, res) => {
-  res.send(JSON.stringify(req.user, null, 2));
+  const user = req.user;
+  console.log(user);
+  res.render("index", {url: ""});
 });
 
 module.exports = router;
