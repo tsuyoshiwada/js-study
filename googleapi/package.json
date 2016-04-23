@@ -1,24 +1,21 @@
 {
-  "name": "sample-googleapi",
+  "name": "googleapi-sample",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "supervisor app.js"
+    "start": "supervisor server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
     "dotenv": "^2.0.0",
-    "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "google-auth-library": "^0.9.7",
-    "googleapis": "^5.1.0",
+    "googleapis": "^5.2.1",
     "supervisor": "^0.10.0"
-  },
-  "devDependencies": {
-    "body-parser": "^1.15.0"
   }
 }
