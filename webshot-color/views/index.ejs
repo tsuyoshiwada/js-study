@@ -16,34 +16,20 @@
     #result {
       margin: 5em auto;
       border: 2px solid #666;
+      font-size: 0;
+    }
+    #result span {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
     }
   </style>
 </head>
 <body>
-  <form action="/api/image" id="form">
-    <input id="form-url" type="text" name="url" size="30">
+  <form action="/" method="post" id="form">
+    <input id="form-url" type="text" name="url" size="30" value="https://blog.wadackel.me/">
     <button type="submit">submit</button>
   </form>
-  <div id="result"></div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var $form = document.getElementById("form");
-      var $url = document.getElementById("form-url");
-      var $result = document.getElementById("result");
-
-      function renderImage(url) {
-        var $img = new Image();
-        $img.src = "/api/image/" + encodeURIComponent(url);
-        $result.innerHTML = "";
-        $result.appendChild($img);
-      }
-
-      $form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        renderImage($url.value);
-      }, false);
-    }, false);
-  </script>
+  <div id="result"><%- result %></div>
 </body>
 </html>

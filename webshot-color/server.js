@@ -3,14 +3,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const webshot = require("webshot");
+const palette = require("palette");
+const Canvas = require("canvas");
+const Image = Canvas.Image;
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", `${__dirname}/views`);
+
 
 function createScreenshot(url, options = {}) {
   return new Promise((resolve, reject) => {
@@ -27,8 +32,37 @@ function createScreenshot(url, options = {}) {
   });
 }
 
-app.get("/api/image/:url", (req, res) => {
-  const {url} = req.params;
+
+function createColorPalette(buffer) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = new Canvas();
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      resolve({
+        canvas,
+        colors: palette(canvas)
+      });
+    };
+
+    img.src = buffer;
+  });
+}
+
+
+app.get("/", (req, res) => {
+  res.render("index", {result: ""});
+});
+
+
+app.post("/", (req, res) => {
+  const {url} = req.body;
   const options = {
     windowSize: {
       width: 1280,
@@ -40,14 +74,24 @@ app.get("/api/image/:url", (req, res) => {
     }
   };
 
-  createScreenshot(url, options).then((data) => {
-    res.status(200).end(data, "binary");
-  });
+  Promise.resolve()
+    .then(() => {
+      return createScreenshot(url, options);
+    })
+    .then((buffer) => {
+      return createColorPalette(buffer);
+    })
+    .then((results) => {
+      const {canvas, colors} = results;
+      const colorHtml = colors.map(color => `<span style="background:rgb(${color.join(",")});"></span>`).join("\n");
+      const result = `
+        ${colorHtml}
+        <img src="${canvas.toDataURL()}" alt="">
+      `;
+      res.render("index", {result});
+    });
 });
 
-app.get("/", (req, res) => {
-  res.render("index", {});
-});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
