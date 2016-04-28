@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>test</title>
+  <style>
+    body {
+      padding: 1em 5em;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+    #result {
+      margin: 5em auto;
+      border: 2px solid #666;
+    }
+  </style>
+</head>
+<body>
+  <form action="/api/image" id="form">
+    <input id="form-url" type="text" name="url" size="30">
+    <button type="submit">submit</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var $form = document.getElementById("form");
+      var $url = document.getElementById("form-url");
+      var $result = document.getElementById("result");
+
+      function renderImage(url) {
+        var $img = new Image();
+        $img.src = "/api/image/" + encodeURIComponent(url);
+        $result.innerHTML = "";
+        $result.appendChild($img);
+      }
+
+      $form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        renderImage($url.value);
+      }, false);
+    }, false);
+  </script>
+</body>
+</html>

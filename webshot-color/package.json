@@ -1,0 +1,21 @@
+{
+  "name": "webshot-color-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "supervisor server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "node-vibrant": "^2.1.2",
+    "webshot": "^0.18.0"
+  },
+  "devDependencies": {
+    "supervisor": "^0.10.0"
+  }
+}
