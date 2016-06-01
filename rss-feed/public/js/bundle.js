@@ -20133,6 +20133,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function fetchRSS(url) {
+  return (0, _isomorphicFetch2.default)("/api/feed/" + encodeURIComponent(url)).then(function (res) {
+    return res.json();
+  });
+}
+
 var App = function (_Component) {
   _inherits(App, _Component);
 
@@ -20144,7 +20150,11 @@ var App = function (_Component) {
 
   _createClass(App, [{
     key: "componentWillMount",
-    value: function componentWillMount() {}
+    value: function componentWillMount() {
+      fetchRSS("https://dribbble.com/shots/popular.rss").then(function (res) {
+        console.log(res);
+      });
+    }
   }, {
     key: "render",
     value: function render() {
