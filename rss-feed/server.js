@@ -12,28 +12,42 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.get("/api/feed/:url", (req, res) => {
-  console.log("START");
   const client = request(req.params.url);
   const feedparser = new FeedParser();
-  const data = {};
+  const data = {
+    meta: {},
+    items: []
+  };
 
+  // request
   client.on("error", err => console.log(err));
+
   client.on("response", function(response) {
-    console.log("RESPONSE");
+    if (response.statusCode !== 200) return this.emit("error", new Error("Bad status code"));
     this.pipe(feedparser);
   });
 
+  // feed parser
   feedparser.on("error", err => console.log(err));
+
   feedparser.on("readable", function() {
-    const meta = this.meta;
+    data.meta = this.meta;
+
     let item;
-    console.log("READABLE");
-
     while (item = this.read()) {
-      console.log(item);
+      const image = item.description.match(/<img.*?src=[\"\'](.+?)[\"\'].*?>/i);
+      if (image) {
+        item.image = image[1];
+        data.items.push(item);
+      }
     }
+  });
 
-    // TODO
+  feedparser.on("end", function() {
+    data.items.forEach(item => {
+      console.log(data.meta);
+    });
+
     res.json(data);
   });
 });
