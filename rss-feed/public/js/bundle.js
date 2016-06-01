@@ -20115,6 +20115,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require("react");
@@ -20133,35 +20135,88 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var rssLinks = ["https://dribbble.com/shots/popular.rss", "https://www.typographicposters.com/rss/thefeed.rss"];
+
 function fetchRSS(url) {
   return (0, _isomorphicFetch2.default)("/api/feed/" + encodeURIComponent(url)).then(function (res) {
     return res.json();
   });
 }
 
+var Item = function Item(_ref) {
+  var title = _ref.title;
+  var link = _ref.link;
+  var image = _ref.image;
+  var pubdate = _ref.pubdate;
+
+  return _react2.default.createElement(
+    "dl",
+    null,
+    _react2.default.createElement(
+      "dt",
+      null,
+      _react2.default.createElement(
+        "a",
+        { href: link },
+        title
+      ),
+      " - ",
+      pubdate
+    ),
+    _react2.default.createElement(
+      "dd",
+      null,
+      _react2.default.createElement("img", { style: {
+          width: "100px",
+          height: "auto"
+        }, src: image })
+    )
+  );
+};
+
 var App = function (_Component) {
   _inherits(App, _Component);
 
-  function App() {
+  function App(props) {
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
+
+    _this.state = {
+      items: []
+    };
+    return _this;
   }
 
   _createClass(App, [{
     key: "componentWillMount",
     value: function componentWillMount() {
-      fetchRSS("https://dribbble.com/shots/popular.rss").then(function (res) {
-        console.log(res);
+      var _this2 = this;
+
+      rssLinks.forEach(function (rssLink) {
+        fetchRSS(rssLink).then(function (res) {
+          var items = res.items;
+
+          console.log(items);
+          _this2.setState({ items: _this2.state.items.concat(items) });
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      var items = this.state.items.map(function (item) {
+        return _react2.default.createElement(Item, _extends({ key: item.guid }, item));
+      });
       return _react2.default.createElement(
         "div",
         null,
-        "App"
+        _react2.default.createElement(
+          "h1",
+          null,
+          "Items"
+        ),
+        items
       );
     }
   }]);
